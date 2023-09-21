@@ -1,0 +1,7 @@
+node_modules/
+# Enviroment variables
+.env
+# Space data
+.space
+
+app/public/
