@@ -36,7 +36,8 @@ export default function MainApp() {
       <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
         <AppShell
           padding="md"
-          layout={width <  700 ? "default" : "alt"}
+          style={{backgroundImage: "-webkit-repeating-radial-gradient(top center,rgba(0,0,0,.1),rgba(0,0,0,.1) 1px,transparent 0,transparent 100%)", backgroundSize: "20px 20px"}}
+          layout={width < 700 ? "default" : "alt"}
           navbar={<NavBarComponent opened={opened} toggle={toggle}/>}
           header={<HeaderComponent refresh={handleRefresh} changeTheme={toggleColorScheme} showBurger={width < 700 ? true : false} opened={opened} toggle={toggle}/>}
         >

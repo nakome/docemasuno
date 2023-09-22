@@ -102,7 +102,6 @@ export default function CreateBin() {
       setLoadingAdd(false);
     }
   }
-
   return (
     data && (
       <Container fluid data-color-mode={theme.colorScheme === "dark" ? "dark" : "light"} >

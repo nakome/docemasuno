@@ -100,7 +100,7 @@ export default function CardViews(props) {
   React.useEffect(() => {
     const timeout = setTimeout(() => {
       setReady(true);
-    }, 1000);
+    }, 800);
 
     return () => {
       setReady(false);
@@ -124,7 +124,7 @@ export default function CardViews(props) {
               <CardHeader layoutView={layoutView} item={item} theme={theme} handlePublished={handlePublished}/>
               <CardBody layoutView={layoutView} value={value} item={item} theme={theme} loadSnippetView={loadSnippetView}/>
             </Card>
-            ) : layoutView ? (<CardLoaderLines/>) : (<CardLoader/>)}
+            ) : layoutView ? (<CardLoaderLines />) : (<CardLoader/>)}
           </Grid.Col>
         ))}
     </Grid>
