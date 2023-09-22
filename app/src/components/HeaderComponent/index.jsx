@@ -6,6 +6,7 @@ import {
   useMantineTheme,
   Input,
   Group,
+  Tooltip,
   ActionIcon
 } from "@mantine/core";
 import { useLocalStorage, useViewportSize } from "@mantine/hooks";
@@ -71,11 +72,10 @@ export default function HeaderComponent(props) {
           />
         </Group>
         <Group>
-          <ActionIcon onClick={props.refresh} variant="light" color="gray" mt={4} aria-label="Settings">
+          <ActionIcon onClick={props.refresh} variant="light" color="gray" mt={4} aria-label="Refresh">
             <IconReload size="1rem" />
           </ActionIcon>
-
-          <ActionIcon onClick={handleChangeLayout} variant="light" color="gray" mt={4} aria-label="Settings">
+          <ActionIcon onClick={handleChangeLayout} variant="light" color="gray" mt={4} aria-label="Layout mode">
             {layoutView ? <IconLayoutList size="1rem" /> : <IconLayout2 size="1rem" />}
           </ActionIcon>
 

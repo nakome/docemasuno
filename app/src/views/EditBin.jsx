@@ -35,6 +35,8 @@ import { Languages } from "../config/Lang";
 // Utils
 import { today } from "../utils/Date";
 
+import { SettingLoader,EditorLoader } from "../components/Animations/Loaders";
+
 /**
  * Edit Bin
  * @param {object} params
@@ -54,9 +56,6 @@ export default function EditBin({ params }) {
   //  Data states
   const [data, setData] = React.useState({});
   const [content, setContent] = React.useState("");
-
-  // loading
-  const [visible, setVisible] = React.useState(true);
 
   // Init Deta
   const Db = Base("bins");
@@ -86,6 +85,7 @@ export default function EditBin({ params }) {
 
   React.useEffect(() => {
     loadViewData();
+    return () => {};
   }, []);
 
   // Update states
@@ -98,7 +98,6 @@ export default function EditBin({ params }) {
     const response = await Db.get(params.key);
     setData(response);
     setContent(response.content);
-    setVisible(false);
   }
 
   // Update bin
@@ -122,11 +121,7 @@ export default function EditBin({ params }) {
   function deleteBin() {
     return modals.openConfirmModal({
       title: Lang("are_you_sure"),
-      children: (
-        <Text size="sm">
-          {Lang("are_you_sure")}
-        </Text>
-      ),
+      children: (<Text size="sm">{Lang("are_you_sure")}</Text>),
       labels: { confirm: Lang("delete"), cancel: Lang("cancel") },
       onConfirm: async () => {
         try {
@@ -149,8 +144,6 @@ export default function EditBin({ params }) {
       fluid
       data-color-mode={theme.colorScheme === "dark" ? "dark" : "light"}
     >
-      <LoadingOverlay visible={visible} overlayBlur={2} color="teal" />
-
       <Group position="apart" mt="md" mb="xs">
         <Group>
           <Button
@@ -196,13 +189,13 @@ export default function EditBin({ params }) {
         </Tabs.List>
 
         <Tabs.Panel value="editor" pt="xs">
-          <React.Suspense fallback={<>🚀</>}>
+          <React.Suspense fallback={<SettingLoader/>}>
             <FormEditor data={data} content={content} setContent={setContent} />
           </React.Suspense>
         </Tabs.Panel>
 
         <Tabs.Panel value="settings" pt="xs">
-          <React.Suspense fallback={<>🚀</>}>
+          <React.Suspense fallback={<EditorLoader/>}>
             <FormSettings data={data} updateState={updateState} />
           </React.Suspense>
         </Tabs.Panel>

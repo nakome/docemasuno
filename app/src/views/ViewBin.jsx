@@ -27,8 +27,11 @@ import { toFullDate } from "../utils/Date";
 import NotFound from "./NotFound";
 // Used for languages
 import { Languages } from "../config/Lang";
+
 // Editor lazy
 import MDEditor from "@uiw/react-md-editor";
+import { ViewBinLoader } from "../components/Animations/Loaders";
+
 /**
  * View bin
  * @param {object} params
@@ -144,9 +147,13 @@ export default function ViewBin({ params }) {
     setVisible(false);
   }
 
+  if (visible) {
+    return (<ViewBinLoader/>);
+  }
+
   return data ? (
     <Container fluid data-color-mode={theme.colorScheme === "dark" ? "dark" : "light"}>
-      <LoadingOverlay visible={visible} overlayBlur={2} color="teal" />
+
       <Group position="apart" mt="md" mb="xs">
         <Title order={1} size={20} color="teal.5">{data.title}</Title>
         <Group gap="xs">
@@ -176,16 +183,22 @@ export default function ViewBin({ params }) {
           </Menu>
         </Group>
       </Group>
+
       <Space h={3} />
+
       <Text size="sm" color={(theme) => (theme.colorScheme === "dark" ? "light" : "dark.5")}>{data.description}</Text>
+
       <Space h={3} />
+
       <Group position="apart" mt="md" mb="xs">
         <Badge color="violet">
           <LinkTo query={data.category} name={data.category} />
         </Badge>
         <Badge color="grape">{toFullDate(value,data.lastModified)}</Badge>
       </Group>
+
       <Space h={10} />
+
       {data.category === "markdown" ? (
         <MDEditor.Markdown
           source={data.content}
@@ -209,6 +222,7 @@ export default function ViewBin({ params }) {
           {data.content ? data.content : ""}
         </Prism>
       )}
+
     </Container>
   ) : (
     <NotFound />

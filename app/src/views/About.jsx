@@ -4,6 +4,9 @@ import { useLocalStorage } from "@mantine/hooks";
 // Used for languages
 import { Languages } from "../config/Lang";
 
+/**
+ * About component
+ */
 export default function About() {
   // Used for languages
   const [value] = useLocalStorage({ key: 'language', defaultValue: 'en' });

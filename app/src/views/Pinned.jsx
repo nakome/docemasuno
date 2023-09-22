@@ -56,17 +56,18 @@ export default function Pinned({ params }) {
       if (response.count > 0) {
         const data = await loadBin(response);
         setData(data);
-        setVisible(false);
         setLoadingMore(false);
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setVisible(false);
     }
   }
 
   return (<Container fluid>
-    {!visible ? (<React.Suspense fallback={<Preloader />}>
+    {!visible ? (<React.Suspense fallback={null}>
       <CardViews pag={limit} loadingMore={loadingMore} loadMore={loadMore} data={data} />
-    </React.Suspense>) : (<Preloader />)}
+    </React.Suspense>):(<Preloader/>)}
   </Container>)
 }

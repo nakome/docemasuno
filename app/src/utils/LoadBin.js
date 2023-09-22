@@ -21,7 +21,7 @@ export default async function loadBin(bins) {
   };
 
   // Return the new object with the sorted objects
-  return newArray;
+  return bins;
 }
 
 // Define a custom comparison function to sort the array

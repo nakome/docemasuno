@@ -27,7 +27,7 @@ export default function Home({ params }) {
   const dataPerClick = AppSettings.pagination;
   // Data
   const [data, setData] = React.useState([]);
-  // Loader state
+  // Loader state for first time
   const [visible, setVisible] = React.useState(true);
   // Limit
   const [limit, setLimit] = React.useState(dataPerClick);
@@ -49,16 +49,20 @@ export default function Home({ params }) {
 
   // Load initial data
   async function loadInitialData(lmt) {
-    let query = {}
-    const response = await Db.fetch(query,{limit: lmt,desc:true})
-    if (response.count > 0) setData(response);
-    setVisible(false);
-    setLoadingMore(false);
+    try {
+      let query = {}
+      const response = await Db.fetch(query,{limit: lmt,desc:true})
+      if (response.count > 0) setData(response);
+      setLoadingMore(false);
+      setVisible(false)
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (<Container fluid>
-    {!visible ? (<React.Suspense fallback={<Preloader/>}>
+    {!visible ? (<React.Suspense fallback={null}>
       <CardViews pag={limit} loadingMore={loadingMore} loadMore={loadMore} data={data} />
-    </React.Suspense>) : (<Preloader/>)}
+    </React.Suspense>):(<Preloader/>)}
   </Container>)
 }

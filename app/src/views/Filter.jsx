@@ -31,11 +31,11 @@ export default function Filter({ params }) {
   // Data
   const [data, setData] = React.useState([]);
 
-  // Used for loader
-  const [visible, setVisible] = React.useState(true);
-
   // Limit pagination
   const [limit, setLimit] = React.useState(dataPerClick);
+
+  // Loader state for first time
+  const [visible, setVisible] = React.useState(true);
 
   // Load more btn
   const [loadingMore, setLoadingMore] = React.useState(false);
@@ -47,7 +47,6 @@ export default function Filter({ params }) {
   dayjs.extend(relativeTime)
 
   React.useEffect(() => {
-    setVisible(true);
     loadInitialData(dataPerClick)
   }, [params])
 
@@ -76,13 +75,13 @@ export default function Filter({ params }) {
     ]
     const response = await Db.fetch(query, { limit: lmt })
     if (response.count > 0) setData(await loadBin(response));
+    setLoadingMore(false);
     setVisible(false);
-    setLoadingMore(false)
   }
 
   return (<Container fluid>
-    {!visible ? (<React.Suspense fallback={<Preloader/>}>
+    {!visible ? (<React.Suspense fallback={null}>
       <CardViews pag={limit} loadingMore={loadingMore} loadMore={loadMore} data={data} />
-    </React.Suspense>) : (<Preloader/>)}
+    </React.Suspense>):(<Preloader/>)}
   </Container>)
 }

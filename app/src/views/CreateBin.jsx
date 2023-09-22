@@ -19,6 +19,8 @@ import { notifications } from "@mantine/notifications";
 import { today } from "../utils/Date";
 // Used for languages
 import { Languages } from "../config/Lang";
+// Loader components
+import { SettingLoader,EditorLoader } from "../components/Animations/Loaders";
 // Form lazy components
 const FormSettings = React.lazy(() => import("../components/FormSettings"));
 const FormEditor = React.lazy(() => import("../components/FormEditor"));
@@ -113,11 +115,11 @@ export default function CreateBin() {
           </Button>
         </Group>
         <Space h={10} />
-        <React.Suspense fallback={<>🚀 load settings</>}>
+        <React.Suspense fallback={<SettingLoader/>}>
           <FormSettings data={data} updateState={updateState} />
         </React.Suspense>
         <Space h="md" />
-        <React.Suspense fallback={<>🚀 load editor</>}>
+        <React.Suspense fallback={<EditorLoader/>}>
           <FormEditor data={data} content={content} setContent={setContent} />
         </React.Suspense>
       </Container>

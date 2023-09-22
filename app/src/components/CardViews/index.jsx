@@ -29,6 +29,9 @@ import LinkTo from "../../components/LinkTo";
 // Used for languages
 import { Languages } from "../../config/Lang";
 
+// Components
+import { CardLoader,CardLoaderLines } from "../Animations/Loaders";
+
 // Card header
 const CardHeader = (props) => {
   const layout = props.layoutView;
@@ -63,7 +66,8 @@ const CardBody = props => {
         {Lang("view_more")}
       </Button>
     </Group>
-  </React.Fragment>) : ("")
+    </React.Fragment>
+  ) : ("")
 }
 
 /**
@@ -74,6 +78,9 @@ export default function CardViews(props) {
   // Used for languages
   const [value] = useLocalStorage({ key: "language", defaultValue: "en" });
   const Lang = (name) => Languages[value][name];
+
+  const [ready,setReady] = React.useState(false)
+
   // Theme colors
   const theme = useMantineTheme();
   // Layout
@@ -90,27 +97,50 @@ export default function CardViews(props) {
   // View bin
   const loadSnippetView = React.useCallback((key) => { navigate(`/view/${key}`);}, []);
 
-  return (
-    <React.Fragment>
-      <Grid gutter={layoutView ? 2 : "md"}>
-        {props.data.count > 0 &&
-          props.data.items.map((item) => (
-            <Grid.Col md={layoutView ? 12 : 6} lg={layoutView ? 12 : 4} xl={layoutView ? 12 : 3} key={item.key}>
-              <Card shadow={layoutView ? "xs" : "md"} padding="md" radius="md" mb="xs" withBorder>
-                <CardHeader layoutView={layoutView} item={item} theme={theme} handlePublished={handlePublished}/>
-                <CardBody layoutView={layoutView} value={value} item={item} theme={theme} loadSnippetView={loadSnippetView}/>
-              </Card>
-            </Grid.Col>
-          ))}
-      </Grid>
-      <Space h={10} />
-      {props.data.count > 0 && (
-        <Button rightIcon={<IconArrowNarrowDown size="1rem" />} onClick={props.loadMore} loading={props.loadingMore} variant="light" fullWidth color="teal" mt="md" radius="md">
-          {Lang("load_more")}
-        </Button>
-      )}
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      setReady(true);
+    }, 1000);
 
-      {props.data.count > 0 ? ("") : (<Alert icon={<IconAlertCircle size="1rem" />} title={Lang("error")} color="red">{Lang("msg_error_fetch")}</Alert>)}
-    </React.Fragment>
-  );
+    return () => {
+      setReady(false);
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  if(!props.data.items) {
+    return <Alert icon={<IconAlertCircle size="1rem" />} title="Ups.." color="red">
+      {Lang("msg_error_fetch")} <Link to="/create">{Lang("create")}</Link>
+    </Alert>
+  }
+
+  return <React.Fragment>
+    <Grid gutter={layoutView ? 2 : "md"}>
+      {props.data.count > 0 &&
+        props.data.items.map((item) => (
+          <Grid.Col md={layoutView ? 12 : 6} lg={layoutView ? 12 : 4} xl={layoutView ? 12 : 3} key={item.key}>
+            {ready ? (
+            <Card shadow={layoutView ? "xs" : "md"} padding="md" radius="md" mb="xs" withBorder>
+              <CardHeader layoutView={layoutView} item={item} theme={theme} handlePublished={handlePublished}/>
+              <CardBody layoutView={layoutView} value={value} item={item} theme={theme} loadSnippetView={loadSnippetView}/>
+            </Card>
+            ) : layoutView ? (<CardLoaderLines/>) : (<CardLoader/>)}
+          </Grid.Col>
+        ))}
+    </Grid>
+    <Space h={10} />
+    {props.data.items && props.data.count > 0 && (
+      <Button
+        rightIcon={<IconArrowNarrowDown size="1rem" />}
+        onClick={props.loadMore}
+        loading={props.loadingMore}
+        variant="light"
+        fullWidth
+        color="teal"
+        mt="md"
+        radius="md">
+        {Lang("load_more")}
+      </Button>
+    )}
+  </React.Fragment>
 }

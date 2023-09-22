@@ -17,17 +17,17 @@ import AppSettings from "../config/AppSettings";
 const CardViews = React.lazy(() => import("../components/CardViews"))
 /**
  * Share links view
- * @param {objects} params
+ * @param {object} params
  */
 export default function ShareLink({ params }) {
   // Pagination
   const dataPerClick = AppSettings.pagination;
   // Data state
   const [data, setData] = React.useState([]);
-  // Loader
-  const [visible, setVisible] = React.useState(true);
   // Limit
   const [limit, setLimit] = React.useState(dataPerClick);
+  // Preloader
+  const [visible, setVisible] = React.useState(true);
   // btn loaders
   const [loadingMore, setLoadingMore] = React.useState(false);
   // Init Deta
@@ -49,13 +49,13 @@ export default function ShareLink({ params }) {
     let query = {"published":true}
     const response = await Db.fetch(query)
     if (response.count > 0) setData(await loadBin(response));
-    setVisible(false);
     setLoadingMore(false);
+    setVisible(false);
   }
 
   return (<Container fluid>
-    {!visible ? (<React.Suspense fallback={<Preloader/>}>
-      <CardViews pag={limit} loadingMore={loadingMore} loadMore={loadMore} data={data}/>
-    </React.Suspense>) : (<Preloader/>)}
+    {!visible ? (<React.Suspense fallback={null}>
+      <CardViews pag={limit} loadingMore={loadingMore} loadMore={loadMore} data={data} />
+    </React.Suspense>):(<Preloader/>)}
   </Container>)
 }
