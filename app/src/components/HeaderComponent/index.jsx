@@ -6,12 +6,10 @@ import {
   useMantineTheme,
   Input,
   Group,
-  Tooltip,
   ActionIcon
 } from "@mantine/core";
 import { useLocalStorage, useViewportSize } from "@mantine/hooks";
 import { IconSun, IconMoonStars, IconSearch, IconReload, IconLayout2, IconLayoutList } from "@tabler/icons-react";
-
 import { navigate } from "wouter/use-location";
 // Used for languages
 import { Languages } from "../../config/Lang";

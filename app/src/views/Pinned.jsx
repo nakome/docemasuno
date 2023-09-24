@@ -10,12 +10,11 @@ import 'dayjs/locale/gl'
 
 // Used for load data without content
 import loadBin from "../utils/LoadBin";
-// Preloader
-import { Preloader } from "../components/Preloaders";
 // App settings
 import AppSettings from "../config/AppSettings";
-// Card views lazy
-const CardViews = React.lazy(() => import("../components/CardViews"))
+// Components
+import CardViews from "../components/CardViews";
+
 /**
  * Pinned
  * @param {object} params
@@ -26,8 +25,8 @@ export default function Pinned({ params }) {
   const dataPerClick = AppSettings.pagination;
   // Data
   const [data, setData] = React.useState([]);
-  // Preloader
-  const [visible, setVisible] = React.useState(true);
+  // Alert state when not show data
+  const [showAlert, setShowAlert] = React.useState(false);
   // limit
   const [limit, setLimit] = React.useState(dataPerClick);
   // Btn loader
@@ -57,17 +56,13 @@ export default function Pinned({ params }) {
         const data = await loadBin(response);
         setData(data);
         setLoadingMore(false);
-      }
+      } else setShowAlert(true);
     } catch (error) {
       console.error(error);
-    } finally {
-      setVisible(false);
     }
   }
 
   return (<Container fluid>
-    {!visible ? (<React.Suspense fallback={null}>
-      <CardViews pag={limit} loadingMore={loadingMore} loadMore={loadMore} data={data} />
-    </React.Suspense>):(<Preloader/>)}
+      <CardViews showAlert={showAlert} pag={limit} loadingMore={loadingMore} loadMore={loadMore} data={data} />
   </Container>)
 }

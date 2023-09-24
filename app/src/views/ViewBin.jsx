@@ -2,7 +2,6 @@ import React from "react";
 import {
   useMantineTheme,
   Container,
-  LoadingOverlay,
   Text,
   Title,
   Space,
@@ -30,7 +29,6 @@ import { Languages } from "../config/Lang";
 
 // Editor lazy
 import MDEditor from "@uiw/react-md-editor";
-import { ViewBinLoader } from "../components/Animations/Loaders";
 
 /**
  * View bin
@@ -44,13 +42,8 @@ export default function ViewBin({ params }) {
   const theme = useMantineTheme();
   // Data states
   const [data, setData] = React.useState({});
-  // loader views
-  const [visible, setVisible] = React.useState(true);
   // Init Deta
   const Db = Base("bins");
-
-  React.useEffect(() => {loadViewData();}, []);
-
   // Edit code
   const editCode = (key) => navigate(`/edit/${params.key}`);
   // Update states
@@ -133,27 +126,22 @@ export default function ViewBin({ params }) {
     }
   };
 
-
   // Share links
   const handleShareLink = React.useCallback(() => {
     let url = `${location.origin}/api/share/${data.key}`;
     window.open(url, '_blank');
   },[data]);
 
+  React.useEffect(() => {loadViewData()},[])
+
   // Load data
   async function loadViewData() {
     const response = await Db.get(params.key);
     setData(response);
-    setVisible(false);
-  }
-
-  if (visible) {
-    return (<ViewBinLoader/>);
   }
 
   return data ? (
     <Container fluid data-color-mode={theme.colorScheme === "dark" ? "dark" : "light"}>
-
       <Group position="apart" mt="md" mb="xs">
         <Title order={1} size={20} color="teal.5">{data.title}</Title>
         <Group gap="xs">
@@ -183,22 +171,16 @@ export default function ViewBin({ params }) {
           </Menu>
         </Group>
       </Group>
-
       <Space h={3} />
-
       <Text size="sm" color={(theme) => (theme.colorScheme === "dark" ? "light" : "dark.5")}>{data.description}</Text>
-
       <Space h={3} />
-
       <Group position="apart" mt="md" mb="xs">
         <Badge color="violet">
           <LinkTo query={data.category} name={data.category} />
         </Badge>
         <Badge color="grape">{toFullDate(value,data.lastModified)}</Badge>
       </Group>
-
       <Space h={10} />
-
       {data.category === "markdown" ? (
         <MDEditor.Markdown
           source={data.content}
@@ -222,7 +204,6 @@ export default function ViewBin({ params }) {
           {data.content ? data.content : ""}
         </Prism>
       )}
-
     </Container>
   ) : (
     <NotFound />

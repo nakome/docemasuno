@@ -1,23 +1,21 @@
 import React from "react";
 import { Switch, Route } from "wouter";
-import { Preloader } from "./components/Preloaders";
 
 // Load views with lazy
-const Home = React.lazy(() => import("./views/Home"));
-const Pinned = React.lazy(() => import("./views/Pinned"));
-const ShareLink = React.lazy(() => import("./views/ShareLink"));
-const CreateBin = React.lazy(() => import("./views/CreateBin"));
-const EditBin = React.lazy(() => import("./views/EditBin"));
-const ViewBin = React.lazy(() => import("./views/ViewBin"));
-const About = React.lazy(() => import("./views/About"));
-const Settings = React.lazy(() => import("./views/Settings"));
-const Filter = React.lazy(() => import("./views/Filter"));
-const NotFound = React.lazy(() => import("./views/NotFound"));
-const ErrorBoundary = React.lazy(() => import("./components/ErrorBoundary"));
+import Home from "./views/Home"
+import Pinned from "./views/Pinned"
+import ShareLink from "./views/ShareLink"
+import Filter from "./views/Filter"
+import CreateBin from "./views/CreateBin"
+import About from "./views/About"
+import Settings from "./views/Settings"
+import ViewBin from "./views/ViewBin"
+import EditBin from "./views/EditBin"
+import NotFound from "./views/NotFound"
+import ErrorBoundary from "./components/ErrorBoundary"
 
 export default function App() {
   return (
-    <React.Suspense fallback={<Preloader/>}>
       <ErrorBoundary>
         <Switch>
           <Route path="/" component={Home} />
@@ -33,6 +31,5 @@ export default function App() {
           <Route component={NotFound} />
         </Switch>
       </ErrorBoundary>
-    </React.Suspense>
   );
 }

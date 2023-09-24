@@ -1,3 +1,4 @@
+import React from "react";
 import { Container, Title, Text, List } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 

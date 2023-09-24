@@ -39,13 +39,13 @@ export default function NavBarComponent(props) {
   const Lang = name => Languages[value][name];
   // location
   const [location] = useLocation();
-
   // Theme colors
   const theme = useMantineTheme();
   // Styles
   const { classes } = useStyles();
   // Viewport size
   const { width } = useViewportSize();
+  // Links
   const Links = [
     { color: theme.colorScheme === "dark" ? theme.colors.teal[5] : theme.colors.teal[7], link: "/", label: Lang("home"), icon: IconHome2 },
     { color: theme.colorScheme === "dark" ? theme.colors.red[5] : theme.colors.red[7], link: "/pinned", label: Lang("pinned"), icon: IconPinned },
@@ -72,6 +72,7 @@ export default function NavBarComponent(props) {
           </Title>
         </Box>
       </Navbar.Section>
+
       <Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
         {Links.map((item) => (
           <Link
@@ -85,6 +86,7 @@ export default function NavBarComponent(props) {
           </Link>
         ))}
       </Navbar.Section>
+
       <Navbar.Section className={classes.footer}>
         <Group position="apart">
           <Anchor target="_blank" color="teal" href={AppSettings.website}>

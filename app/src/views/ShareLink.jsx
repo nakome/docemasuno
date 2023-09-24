@@ -9,12 +9,11 @@ import 'dayjs/locale/de'
 import 'dayjs/locale/gl'
 // Used for load data without content
 import loadBin from "../utils/LoadBin";
-// Preloader
-import { Preloader } from "../components/Preloaders";
 // App settings
 import AppSettings from "../config/AppSettings";
-// Cardviews lazy
-const CardViews = React.lazy(() => import("../components/CardViews"))
+// Components
+import CardViews from "../components/CardViews";
+
 /**
  * Share links view
  * @param {object} params
@@ -26,8 +25,8 @@ export default function ShareLink({ params }) {
   const [data, setData] = React.useState([]);
   // Limit
   const [limit, setLimit] = React.useState(dataPerClick);
-  // Preloader
-  const [visible, setVisible] = React.useState(true);
+  // Alert state when not show data
+  const [showAlert, setShowAlert] = React.useState(false);
   // btn loaders
   const [loadingMore, setLoadingMore] = React.useState(false);
   // Init Deta
@@ -49,13 +48,11 @@ export default function ShareLink({ params }) {
     let query = {"published":true}
     const response = await Db.fetch(query)
     if (response.count > 0) setData(await loadBin(response));
+    else setShowAlert(true)
     setLoadingMore(false);
-    setVisible(false);
   }
 
   return (<Container fluid>
-    {!visible ? (<React.Suspense fallback={null}>
-      <CardViews pag={limit} loadingMore={loadingMore} loadMore={loadMore} data={data} />
-    </React.Suspense>):(<Preloader/>)}
+      <CardViews showAlert={showAlert} pag={limit} loadingMore={loadingMore} loadMore={loadMore} data={data} />
   </Container>)
 }

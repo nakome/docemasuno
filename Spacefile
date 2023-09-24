@@ -8,8 +8,6 @@ micros:
     dev: npm run dev -- --port $PORT
     primary: true
     serve: ./public
-    commands:
-      - npm run build
   - name: api
     src: api
     engine: nodejs16

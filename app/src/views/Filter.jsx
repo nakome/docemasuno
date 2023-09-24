@@ -11,14 +11,10 @@ import 'dayjs/locale/gl'
 // Load data without content
 import loadBin from "../utils/LoadBin";
 
-// Components
-import { Preloader } from "../components/Preloaders";
-
-// AppSettins
+// AppSettings
 import AppSettings from "../config/AppSettings";
-
-// Card views lazy
-const CardViews = React.lazy(() => import("../components/CardViews"))
+// Components
+import CardViews from "../components/CardViews";
 
 /**
  * Filter
@@ -27,22 +23,16 @@ const CardViews = React.lazy(() => import("../components/CardViews"))
 export default function Filter({ params }) {
 
   const dataPerClick = AppSettings.pagination;
-
   // Data
   const [data, setData] = React.useState([]);
-
   // Limit pagination
   const [limit, setLimit] = React.useState(dataPerClick);
-
-  // Loader state for first time
-  const [visible, setVisible] = React.useState(true);
-
+  // Alert state when not show data
+  const [showAlert, setShowAlert] = React.useState(false);
   // Load more btn
   const [loadingMore, setLoadingMore] = React.useState(false);
-
   // Init Deta
   const Db = Base('bins');
-
   // Extend dayjs
   dayjs.extend(relativeTime)
 
@@ -75,13 +65,11 @@ export default function Filter({ params }) {
     ]
     const response = await Db.fetch(query, { limit: lmt })
     if (response.count > 0) setData(await loadBin(response));
+    else setShowAlert(true);
     setLoadingMore(false);
-    setVisible(false);
   }
 
   return (<Container fluid>
-    {!visible ? (<React.Suspense fallback={null}>
-      <CardViews pag={limit} loadingMore={loadingMore} loadMore={loadMore} data={data} />
-    </React.Suspense>):(<Preloader/>)}
+      <CardViews showAlert={showAlert} pag={limit} loadingMore={loadingMore} loadMore={loadMore} data={data} />
   </Container>)
 }

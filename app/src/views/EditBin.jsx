@@ -3,7 +3,6 @@ import {
   Tabs,
   useMantineTheme,
   Container,
-  LoadingOverlay,
   Group,
   Space,
   Button,
@@ -23,9 +22,8 @@ import {
 import { notifications } from "@mantine/notifications";
 
 // Form components
-const FormSettings = React.lazy(() => import("../components/FormSettings"));
-const FormEditor = React.lazy(() => import("../components/FormEditor"));
-
+import FormSettings from "../components/FormSettings"
+import FormEditor from "../components/FormEditor";
 // Not found
 import NotFound from "./NotFound";
 
@@ -34,8 +32,6 @@ import { Languages } from "../config/Lang";
 
 // Utils
 import { today } from "../utils/Date";
-
-import { SettingLoader,EditorLoader } from "../components/Animations/Loaders";
 
 /**
  * Edit Bin
@@ -67,14 +63,14 @@ export default function EditBin({ params }) {
       autoClose: 2000,
       withCloseButton: false,
     },
-    deleted:{
+    deleted: {
       title: Lang("success"),
       message: Lang("msg_data_deleted"),
       autoClose: 2000,
       color: "green",
       withCloseButton: false,
     },
-    deletedErr:{
+    deletedErr: {
       title: Lang("error"),
       message: Lang("msg_error_fetch"),
       autoClose: 2000,
@@ -85,7 +81,7 @@ export default function EditBin({ params }) {
 
   React.useEffect(() => {
     loadViewData();
-    return () => {};
+    return () => { };
   }, []);
 
   // Update states
@@ -114,7 +110,7 @@ export default function EditBin({ params }) {
     } catch (error) {
       setLoadingDel(false)
       notifications.show(Messages.deletedErr);
-      notifications.show({message:error});
+      notifications.show({ message: error });
     }
   }
 
@@ -175,9 +171,7 @@ export default function EditBin({ params }) {
           </Button>
         </Group>
       </Group>
-
       <Space h={10} />
-
       <Tabs color="teal" defaultValue="editor">
         <Tabs.List>
           <Tabs.Tab value="editor" icon={<IconCategory size="0.8rem" />}>
@@ -187,17 +181,11 @@ export default function EditBin({ params }) {
             Meta
           </Tabs.Tab>
         </Tabs.List>
-
         <Tabs.Panel value="editor" pt="xs">
-          <React.Suspense fallback={<SettingLoader/>}>
-            <FormEditor data={data} content={content} setContent={setContent} />
-          </React.Suspense>
+          <FormEditor data={data} content={content} setContent={setContent} />
         </Tabs.Panel>
-
         <Tabs.Panel value="settings" pt="xs">
-          <React.Suspense fallback={<EditorLoader/>}>
-            <FormSettings data={data} updateState={updateState} />
-          </React.Suspense>
+          <FormSettings data={data} updateState={updateState} />
         </Tabs.Panel>
       </Tabs>
     </Container>

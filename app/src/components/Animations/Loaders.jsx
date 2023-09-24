@@ -1,53 +1,9 @@
 import React from "react";
-import { useMantineTheme } from "@mantine/core";
+import { useMantineTheme, LoadingOverlay } from "@mantine/core";
 import { useViewportSize } from '@mantine/hooks';
 import ContentLoader from "react-content-loader"
+import { Dots } from "../../../node_modules/@mantine/core/esm/Loader/loaders/Dots";
 
-
-export const CardLoader = (props) => {
-  const theme = useMantineTheme();
-  return (<ContentLoader
-    viewBox="0 0 260 150"
-    backgroundColor={theme.colors.gray[1]}
-    foregroundColor={theme.colors.gray[2]}
-    {...props}
-  >
-    <rect x="0" y="0" rx="4" ry="4" width="200" height="13" />
-    <rect x="0" y="32" rx="4" ry="4" width="255" height="6" />
-    <rect x="215" y="0" rx="9" ry="9" width="15" height="13" />
-    <rect x="237" y="0" rx="10" ry="10" width="15" height="13" />
-    <rect x="0" y="55" rx="10" ry="10" width="90" height="17" />
-    <rect x="165" y="55" rx="10" ry="10" width="90" height="17" />
-    <rect x="0" y="89" rx="10" ry="10" width="259" height="30" />
-  </ContentLoader>)
-};
-
-export const CardLoaderLines = (props) => {
-  const theme = useMantineTheme();
-  const { width } = useViewportSize();
-  return width < 700 ? (<ContentLoader
-    viewBox="0 0 240 30"
-    backgroundColor={theme.colors.gray[1]}
-    foregroundColor={theme.colors.gray[2]}
-    {...props}
-  >
-    <rect x="0" y="10" rx="8" ry="8" width="100" height="15" />
-    <rect x="200" y="10" rx="8" ry="8" width="15" height="15" />
-    <rect x="225" y="10" rx="8" ry="8" width="15" height="15" />
-  </ContentLoader>
-  ) : (
-    <ContentLoader
-      viewBox="0 0 240 15"
-      backgroundColor={theme.colors.gray[1]}
-      foregroundColor={theme.colors.gray[2]}
-      {...props}
-    >
-      <rect x="0" y="10" rx="4" ry="4" width="50" height="5" />
-      <rect x="225" y="10" rx="4" ry="4" width="5" height="5" />
-      <rect x="235" y="10" rx="4" ry="4" width="5" height="5" />
-    </ContentLoader>
-  )
-};
 
 export const SettingLoader = (props) => {
   const theme = useMantineTheme();
@@ -55,8 +11,8 @@ export const SettingLoader = (props) => {
   return width < 700 ? (
     <ContentLoader
       viewBox="0 0 445 200"
-      backgroundColor={theme.colors.gray[1]}
-      foregroundColor={theme.colors.gray[2]}
+      backgroundColor={theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[1]}
+      foregroundColor={theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[1]}
       {...props}
     >
       <rect x="0" y="0" rx="4" ry="4" width="90" height="20" />
@@ -70,8 +26,8 @@ export const SettingLoader = (props) => {
   ) : (
     <ContentLoader
       viewBox="0 0 445 80"
-      backgroundColor={theme.colors.gray[1]}
-      foregroundColor={theme.colors.gray[2]}
+      backgroundColor={theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[1]}
+      foregroundColor={theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[1]}
       {...props}
     >
       <rect x="0" y="0" rx="4" ry="4" width="90" height="20" />
@@ -88,21 +44,24 @@ export const SettingLoader = (props) => {
 export const EditorLoader = (props) => {
   const theme = useMantineTheme();
   const { width } = useViewportSize();
+  const backgroundColor = theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[1];
+  const foregroundColor = theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[1];
+  const commonProps = {
+    backgroundColor,
+    foregroundColor,
+    ...props
+  };
   return width < 700 ? (
     <ContentLoader
       viewBox="0 0 300 400"
-      backgroundColor={theme.colors.gray[1]}
-      foregroundColor={theme.colors.gray[2]}
-      {...props}
+      {...commonProps}
     >
       <rect x="0" y="0" rx="5" ry="5" width="300" height="400" />
     </ContentLoader>
   ) : (
     <ContentLoader
       viewBox="0 0 300 200"
-      backgroundColor={theme.colors.gray[1]}
-      foregroundColor={theme.colors.gray[2]}
-      {...props}
+      {...commonProps}
     >
       <rect x="0" y="0" rx="5" ry="5" width="300" height="200" />
     </ContentLoader>
@@ -111,17 +70,39 @@ export const EditorLoader = (props) => {
 
 export const ViewBinLoader = props => {
   const theme = useMantineTheme();
-  return (<ContentLoader
-    viewBox="0 0 400 245"
-    backgroundColor={theme.colors.gray[1]}
-    foregroundColor={theme.colors.gray[2]}
-    {...props}
+  const { width } = useViewportSize();
+
+  let componentProps = {
+    style: { margin: "5px" },
+    backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[3] : theme.colors.gray[1],
+    foregroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[2],
+    ...props
+  }
+  return width < 700 ? (<ContentLoader
+    viewBox="0 0 400 500"
+    {...componentProps}
   >
-    <rect x="0" y="0" rx="4" ry="4" width="400" height="9" />
-    <rect x="0" y="16" rx="4" ry="4" width="100" height="8" />
-    <rect x="0" y="35" rx="4" ry="4" width="400" height="10" />
-    <rect x="0" y="55" rx="4" ry="4" width="400" height="10" />
-    <rect x="0" y="73" rx="4" ry="4" width="100" height="10" />
-    <rect x="0" y="93" rx="5" ry="5" width="400" height="150" />
+    <rect x="0" y="5" rx="4" ry="4" width="100" height="10" />
+    <rect x="0" y="25" rx="4" ry="4" width="160" height="8" />
+    <rect x="0" y="45" rx="4" ry="4" width="100" height="15" />
+    <rect x="300" y="45" rx="4" ry="4" width="100" height="15" />
+    <rect x="0" y="70" rx="5" ry="5" width="400" height="300" />
+  </ContentLoader>) : (<ContentLoader
+    viewBox="0 0 400 260"
+    {...componentProps}
+  >
+    <rect x="0" y="5" rx="4" ry="4" width="100" height="9" />
+    <rect x="0" y="20" rx="4" ry="4" width="130" height="8" />
+    <rect x="0" y="35" rx="4" ry="4" width="100" height="10" />
+    <rect x="300" y="35" rx="4" ry="4" width="100" height="10" />
+    <rect x="0" y="55" rx="5" ry="5" width="400" height="190" />
   </ContentLoader>)
 }
+
+export const Preloader = (props) => (
+  <LoadingOverlay
+    visible={true}
+    zIndex={1000}
+    loaderProps={{ color: "teal", component: Dots }}
+  />
+);

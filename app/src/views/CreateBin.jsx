@@ -14,16 +14,11 @@ import {
   IconArrowLeft,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
-
-
 import { today } from "../utils/Date";
 // Used for languages
 import { Languages } from "../config/Lang";
-// Loader components
-import { SettingLoader,EditorLoader } from "../components/Animations/Loaders";
-// Form lazy components
-const FormSettings = React.lazy(() => import("../components/FormSettings"));
-const FormEditor = React.lazy(() => import("../components/FormEditor"));
+import FormSettings from "../components/FormSettings"
+import FormEditor from "../components/FormEditor";
 
 /**
  * CreateBin
@@ -114,13 +109,9 @@ export default function CreateBin() {
           </Button>
         </Group>
         <Space h={10} />
-        <React.Suspense fallback={<SettingLoader/>}>
-          <FormSettings data={data} updateState={updateState} />
-        </React.Suspense>
+        <FormSettings data={data} updateState={updateState} />
         <Space h="md" />
-        <React.Suspense fallback={<EditorLoader/>}>
-          <FormEditor data={data} content={content} setContent={setContent} />
-        </React.Suspense>
+        <FormEditor data={data} content={content} setContent={setContent} />
       </Container>
     )
   );

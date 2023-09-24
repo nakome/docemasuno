@@ -1,5 +1,5 @@
 import React from "react";
-import {Container,Title,FileInput,Button,rem,Box,Select } from '@mantine/core';
+import {Container,Title,FileInput,Button,rem,Box,Select,Grid,Textarea,Space } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 import { notifications } from "@mantine/notifications";
 import {IconDatabaseExport,IconDatabaseImport,IconUpload}  from "@tabler/icons-react";
@@ -76,37 +76,37 @@ export default function Settings({ params }) {
 
   return (
       <Container fluid>
-        <Title order={1} my="lg" color="teal.5">{Lang("import_json")}</Title>
-        <Box mb={20} style={{maxWidth: "20rem"}}>
-          <FileInput
-            placeholder={Lang("pick_file")}
-            label={Lang("pick_label")}
-            my="lg"
-            accept=".json"
-            icon={<IconUpload size={rem(14)} />}
-            value={file}
-            onChange={setFile}
-            width={100}
-          />
-        </Box>
+        <Grid>
+          <Grid.Col xs={12} md={6} xl={4}>
+            <Title order={1} my="lg" color="teal.5">{Lang("import_json")}</Title>
+            <FileInput
+              placeholder={Lang("pick_file")}
+              label={Lang("pick_label")}
+              my="lg"
+              accept=".json"
+              icon={<IconUpload size={rem(14)} />}
+              value={file}
+              onChange={setFile}
+            />
 
-        <Button mb="xl" loading={loadingIm}  onClick={handleImport} leftIcon={<IconDatabaseExport size={rem(14)}/>} variant="light" mr="md">{Lang("import")}</Button>
-        <Button mb="xl" loading={loadingEx} onClick={handleExport} leftIcon={<IconDatabaseImport size={rem(14)}/>} variant="light" color="indigo.5">{Lang("export")}</Button>
+            <Button mb="xl" loading={loadingIm}  onClick={handleImport} leftIcon={<IconDatabaseExport size={rem(14)}/>} variant="light" mr="md">{Lang("import")}</Button>
+            <Button mb="xl" loading={loadingEx} onClick={handleExport} leftIcon={<IconDatabaseImport size={rem(14)}/>} variant="light" color="indigo.5">{Lang("export")}</Button>
 
-        <Box style={{maxWidth: "20rem"}}>
-          <Select
-            label={Lang("language")}
-            placeholder={`Pick one, current ${value}`}
-            value={value}
-            onChange={setValue}
-            data={[
-              { value: 'en', label: 'English' },
-              { value: 'es', label: 'Spanish' },
-              { value: 'gl', label: 'Galician' },
-              { value: 'de', label: 'German' },
-            ]}
-          />
-        </Box>
+            <Select
+              label={Lang("language")}
+              placeholder={`Pick one, current ${value}`}
+              value={value}
+              onChange={setValue}
+              data={[
+                { value: 'en', label: 'English' },
+                { value: 'es', label: 'Spanish' },
+                { value: 'gl', label: 'Galician' },
+                { value: 'de', label: 'German' },
+              ]}
+            />
+
+          </Grid.Col>
+        </Grid>
       </Container>
     )
 }

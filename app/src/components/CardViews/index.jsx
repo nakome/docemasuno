@@ -11,6 +11,7 @@ import {
   Alert,
   Button,
   Space,
+  Skeleton
 } from "@mantine/core";
 import { Link } from "wouter";
 import { navigate } from "wouter/use-location";
@@ -28,9 +29,6 @@ import { toDate } from "../../utils/Date";
 import LinkTo from "../../components/LinkTo";
 // Used for languages
 import { Languages } from "../../config/Lang";
-
-// Components
-import { CardLoader,CardLoaderLines } from "../Animations/Loaders";
 
 // Card header
 const CardHeader = (props) => {
@@ -74,7 +72,7 @@ const CardBody = props => {
  * Card Views
  * @param {object} props
  */
-export default function CardViews(props) {
+export default function CardViews({data,loadMore,loadingMore,showAlert}) {
   // Used for languages
   const [value] = useLocalStorage({ key: "language", defaultValue: "en" });
   const Lang = (name) => Languages[value][name];
@@ -97,47 +95,48 @@ export default function CardViews(props) {
   // View bin
   const loadSnippetView = React.useCallback((key) => { navigate(`/view/${key}`);}, []);
 
+  // fake loading 500ms
   React.useEffect(() => {
     const timeout = setTimeout(() => {
-      setReady(true);
-    }, 800);
-
+        setReady(true);
+    }, 1000);
     return () => {
       setReady(false);
       clearTimeout(timeout);
     };
   }, []);
 
-  if(!props.data.items) {
-    return <Alert icon={<IconAlertCircle size="1rem" />} title="Ups.." color="red">
+  if(showAlert) {
+    return <Alert icon={<IconAlertCircle size="1rem" />} mt={10} title="Ups.." color="red">
       {Lang("msg_error_fetch")} <Link to="/create">{Lang("create")}</Link>
     </Alert>
   }
 
   return <React.Fragment>
-    <Grid gutter={layoutView ? 2 : "md"}>
-      {props.data.count > 0 &&
-        props.data.items.map((item) => (
+    <Grid gutter={layoutView ? 2 : "md"} mt="xs">
+      {data.count > 0 &&
+        data.items.map((item) => (
           <Grid.Col md={layoutView ? 12 : 6} lg={layoutView ? 12 : 4} xl={layoutView ? 12 : 3} key={item.key}>
-            {ready ? (
-            <Card shadow={layoutView ? "xs" : "md"} padding="md" radius="md" mb="xs" withBorder>
-              <CardHeader layoutView={layoutView} item={item} theme={theme} handlePublished={handlePublished}/>
-              <CardBody layoutView={layoutView} value={value} item={item} theme={theme} loadSnippetView={loadSnippetView}/>
-            </Card>
-            ) : layoutView ? (<CardLoaderLines />) : (<CardLoader/>)}
+            <Skeleton visible={!ready} mb={ready ? 0 : layoutView ? 10 : 0}>
+              <Card shadow={layoutView ? "xs" : "md"} padding="md" radius="md" mb="xs" withBorder>
+                <CardHeader layoutView={layoutView} item={item} theme={theme} handlePublished={handlePublished}/>
+                <CardBody layoutView={layoutView} value={value} item={item} theme={theme} loadSnippetView={loadSnippetView}/>
+              </Card>
+            </Skeleton>
           </Grid.Col>
         ))}
     </Grid>
     <Space h={10} />
-    {props.data.items && props.data.count > 0 && (
+    {data.items && data.count > 0 && (
       <Button
         rightIcon={<IconArrowNarrowDown size="1rem" />}
-        onClick={props.loadMore}
-        loading={props.loadingMore}
+        onClick={loadMore}
+        loading={loadingMore}
         variant="light"
         fullWidth
         color="teal"
         mt="md"
+        mb="md"
         radius="md">
         {Lang("load_more")}
       </Button>
